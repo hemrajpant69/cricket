@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HpCrick</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  h2{
+    color: #0056b3;
+  }
+.hidden {
+      display: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+    /* Popup styling */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .popup {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+    }
+    .popup h2 {
+      margin-top: 0;
+    }
+    .popup button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .popup button:hover {
+      background: #0056b3;
+    }
+</style>
+</head>
+<header>
+    <div class="header-content">
+      <h1>HP Crick</h1>
+      <p>Measure your speed here - Test your skill and improve more!</p>
+    </div>
+  </header>
+  
+  
+<body>
+
+
+
+<!-- Popup for User Details -->
+<div id="userPopup" class="popup-overlay hidden">
+  <div class="popup">
+    <h2>Welcome! Please enter your details:</h2>
+    <form id="userInfoForm">
+      <label for="name">Name:</label><br>
+      <input type="text" id="name" required><br><br>
+
+      <label for="age">Age:</label><br>
+      <input type="number" id="age" required><br><br>
+
+      <label for="gender">Gender:</label><br>
+      <select id="gender" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select><br><br>
+
+      <label for="address">Address:</label><br>
+      <input type="text" id="address" required><br><br>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+
+
+
+  <!-- Video Player Section -->
+  <div class="video-section">
+    <h2>Pitch - 20.1 Meter</h2>
+    <div class="video-container">
+      <video id="videoPlayer" controls></video>
+      <div class="overlay-controls">
+        <div class="left-controls">
+            <button class="adjust-btn" data-adjust="-4">-4 ms</button>
+            <button class="adjust-btn" data-adjust="-1">-1 ms</button>
+          </div>
+          <div class="right-controls">
+            <button class="adjust-btn" data-adjust="1">+1 ms</button>
+            <button class="adjust-btn" data-adjust="4">+4 ms</button>
+          </div>
+          
+      </div>
+      <div class="time-display" id="timeDisplay">00:00:00</div>
+      <div class="video-controls">
+        <button class="time-btn" id="releasePoint">Release Point</button>
+        <button class="time-btn" id="reachPoint">Reach Point</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard">
+    <div class="social-buttons">
+
+    <div class="button-group">
+      <button class="button" id="importVideo"><i class="fas fa-video"></i> 
+        <span>Import Video</span></button>
+      
+      
+        <button class="button"><i class="fas fa-chart-line"></i>
+        <span>Performance</span>
+        <div id="performance">
+        </button>
+        <p>No speeds recorded yet.</p>
+      </div>
+
+      
+         
+      <button class="button" id="howToUse"><i class="fas fa-question-circle"></i> <span>How to Use</span></button>
+
+      <!-- How to Use Modal -->
+<div id="howToUseModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <h3>How to Use</h3>
+      <p><strong>Import Video:</strong> Click 'Import Video' to select your video file.</p>
+      <p><strong>Release Point:</strong> Play the video and press 'Release Point' at the ball release moment.</p>
+      <p><strong>Reach Point:</strong> Press 'Reach Point' when the ball reaches the batsman.</p>
+      <p><strong>Speed Calculation:</strong> The speed will be calculated automatically.</p>
+      <p>Use the left and right buttons to adjust the video time by milliseconds.</p>
+      <h3>प्रयोग गर्ने तरिका</h3>
+      <p><strong>भिडियो इम्पोर्ट गर्नुहोस्:</strong> 'Import Video' क्लिक गरेर आफ्नो भिडियो चयन गर्नुहोस्।</p>
+      <p><strong>रिलिज पोइन्ट:</strong> भिडियो प्ले गरेर बल रिलिज गर्ने समयमा 'Release Point' थिच्नुहोस्।</p>
+      <p><strong>रिच पोइन्ट:</strong> बल ब्याट्सम्यानलाई पुग्ने बेला 'Reach Point' थिच्नुहोस्।</p>
+      <p><strong>गति गणना:</strong> गति स्वचालित रूपमा गणना हुनेछ।</p>
+      <p>बायाँ र दायाँ बटनहरू प्रयोग गरेर भिडियो समयलाई मिलीसेकेन्डमा समायोजन गर्नुहोस्।</p>
+
+    </div>
+  </div>
+  
+            <button class="button">
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span></button>
+          
+          
+          
+            <button class="button">
+              <a href="https://www.facebook.com/hptech69" target="_blank" style="text-decoration: none;">
+                <i class="fab fa-facebook"></i>
+                <span>Follow</span>
+              </a>
+            </button>
+              
+  </div>
+  </div>
+  
+  <script src="script.js"></script>
+  <script>
+    const userPopup = document.getElementById('userPopup');
+    const mainContent = document.getElementById('mainContent');
+    const userInfoForm = document.getElementById('userInfoForm');
+    const speedForm = document.getElementById('speedForm');
+    const performanceDiv = document.getElementById('performance');
+
+    const user = localStorage.getItem('user');
+    const speeds = JSON.parse(localStorage.getItem('speeds')) || [];
+
+    if (!user) {
+      userPopup.classList.remove('hidden');
+    } else {
+      mainContent.classList.remove('hidden');
+      displayPerformance();
+    }
+
+    // Handle user form submission
+    userInfoForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const userData = {
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+        gender: document.getElementById('gender').value,
+        address: document.getElementById('address').value,
+      };
+      localStorage.setItem('user', JSON.stringify(userData));
+      alert(`Welcome, ${userData.name}!`);
+
+      userPopup.classList.add('hidden');
+      mainContent.classList.remove('hidden');
+    });
+
+    // Handle speed calculation
+    speedForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const releaseTime = parseFloat(document.getElementById('releaseTime').value);
+      const reachTime = parseFloat(document.getElementById('reachTime').value);
+      const distance = parseFloat(document.getElementById('distance').value);
+
+      if (releaseTime >= reachTime) {
+        alert('Release time must be less than reach time.');
+        return;
+      }
+
+      const timeTaken = reachTime - releaseTime;
+      const speed = (distance / timeTaken).toFixed(2); // Speed in m/s
+
+      speeds.push(speed);
+      localStorage.setItem('speeds', JSON.stringify(speeds));
+      displayPerformance();
+
+      alert(`Ball speed: ${speed} m/s`);
+    });
+
+    // Display performance
+    function displayPerformance() {
+      if (speeds.length === 0) {
+        performanceDiv.innerHTML = '<p>No speeds recorded yet.</p>';
+      } else {
+        const speedList = speeds.map((speed, index) => `<tr><td>${index + 1}</td><td>${speed} m/s</td></tr>`).join('');
+        performanceDiv.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Speed (m/s)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${speedList}
+            </tbody>
+          </table>
+        `;
+      }
+    }
+  </script>
+
+
+
+
+
+
+  
+  <footer>
+    <div class="container">
+      <div class="footer-logo">
+        <h2>HP Crick</h2>
+        <p>Your cricket speed calculator and performance tracker</p>
+      </div>
+      <div class="footer-links">
+        <ul>
+          <li><a href="#terms">Terms of Service</a></li>
+          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="social-media">
+        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+        <a href="https://github.com" target="_blank"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
+
+      </div>
+      <div class="copyright">
+        <p>&copy; 2024 HpTech. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  
+  
+  
+</body>
+</html>
